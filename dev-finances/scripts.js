@@ -7,12 +7,20 @@ const Modal = {
   },
 };
 
+const storage = {
+  get() {
+    return JSON.parse(localStorage.getItem("dev.finances:transactions")) || [];
+  },
+  set(transactions) {
+    localStorage.setItem(
+      "dev.finances:transactions",
+      JSON.stringify(transactions)
+    );
+  },
+};
+
 const Transaction = {
-  all: [
-    { id: 1, description: "Luz", amount: -50000, date: "23/01/2021" },
-    { id: 1, description: "Website", amount: 500000, date: "23/01/2021" },
-    { id: 1, description: "Internet", amount: -20000, date: "23/01/2021" },
-  ],
+  all: storage.get(),
 
   add(transaction) {
     Transaction.all.push(transaction);
@@ -46,6 +54,7 @@ const App = {
     });
 
     DOM.updateBalance();
+    storage.set(Transaction.all);
   },
   reload() {
     DOM.clearTransactions();
@@ -180,5 +189,7 @@ const Form = {
     }
   },
 };
+
+
 
 App.init();
